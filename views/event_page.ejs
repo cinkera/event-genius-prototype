@@ -1,0 +1,147 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title> <%= eventName %> </title>
+  <meta name="description" content="Home Page">
+  <meta name="author" content="Austin Cinker">
+
+  <link rel="stylesheet" href="/stylesheets/event.css">
+
+</head>
+
+<body>
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'> </script>
+    <script src="/javascripts/global.js" > </script>
+  
+	<div class="header"> 	
+			
+		<div class="headCenter">
+			<h1 class="titleText"> <%= eventName %></h1>
+		</div>
+		
+		<div class = "nav">
+			<a href="../home_page"> <button type="button" id="head1" class="bouncy button" onClick="" > Home Page </button></a>
+		</div>	
+
+	</div> 
+	
+	
+    <div class="content">
+	
+		<div class="leftSide">
+		
+			<div class="eventInfoDiv">
+				<p>Event Name: <%= eventName %></p>
+				<p>Date: <%= eventDate %></p>
+				<p>Time: <%= eventTime %></p>
+				<p>Location: <%= eventLocation %></p>
+				<p>Event Info: <%= eventDesc %></p> 
+				<button class="button" onclick="document.getElementById('editInfoModal').style.display='block'" style="bottom: 5px;">Edit info</button>
+				<!-- 				The Modal content for  NEW User		-->
+				<div id="editInfoModal" class="modal" >
+				  <span onclick="document.getElementById('editInfoModal').style.display='none'" 
+				class="close" title="Close Modal">&times;</span>
+				  <!-- Modal Content -->
+				  <form class="modal-content animate" action='/updateEventInfo/<%= eventName %>' method="post">
+					<div class="imgcontainer">
+					  <!-- <img src="img_avatar2.png" alt="Avatar" class="avatar"> -->
+					</div>
+					<div class="container">
+                        <label>Edit Event Name: <input type="text" required autofocus name="editEventName" value='<%= eventName %>'></label><br>
+                        <!-- <label>Edit Event Name: <input type="text" required autofocus name="editEventName" placeholder='<%= eventName %>'></label><br>
+                        -->
+                        <label>Edit Event Date: <input type="date" required name="editEventDate">
+                        </label><p class="hint">Event date durrently set to: <%= eventDate %> </p><br>
+                        <label>Edit Event Time: <input type="time" required name="editEventTime">
+                            </label><p class="hint">Event time durrently set to: <%= eventTime %> </p><br>
+                        <label>Edit Event Location: <input type="text" required name="editEventLocation" value='<%= eventLocation %>'></label><br>
+                        <label>Edit Event Description <textarea required rows='4' cols='25' name="editEventDesc" value='<%= eventDesc %>'></textarea></label><br>
+					</div>
+					<div class="container" style="background-color:#f1f1f1">
+						<br>
+						<a href="../event_page/<%= eventName %>"><button type="submit" class="button">Update Event</button></a>
+					  <button type="button" onclick="document.getElementById('editInfoModal').style.display='none'" class="cancelbtn button">Cancel</button>
+					</div>
+				  </form>
+				</div>
+			</div>
+			
+		</div>
+		
+		<div class="centerContent">
+		<p>
+		
+		</p>
+		
+		</div>
+		
+		<div class = "rightSide">
+			
+			<div class="relatedUsersDiv">
+				
+				<div class="relatedTopLeft">
+					<p> Users associated with <%= eventName %></p>
+				</div>
+				
+				<div class="relatedTopRight">
+					<button class="button" onclick="document.getElementById('addUserModal').style.display='block'" style="bottom: 5px;">Add a User</button>
+					<!-- 				The Modal content for  NEW User		-->
+					<div id="addUserModal" class="modal" >
+					  <span onclick="document.getElementById('addUserModal').style.display='none'" 
+					class="close" title="Close Modal">&times;</span>
+					  <!-- Modal Content -->
+					  <form class="modal-content animate" action="">
+						<div class="imgcontainer">
+						  <!-- <img src="img_avatar2.png" alt="Avatar" class="avatar"> -->
+						</div>
+						<div class="container">
+							<input type="search" results="5" name='searchBar' size="40px" placeholder="Search for a User to add..">
+							
+							<div class="searchResults">
+								<p id="searchResultsHeader">No results to show...</p>
+							</div>
+
+						</div>
+						<div class="container" style="background-color:#f1f1f1">
+							<br>
+							<button type="submit" class="button" >Add This User</button>
+						  <button type="button" onclick="document.getElementById('addUserModal').style.display='none'" class="cancelbtn button">Cancel</button>
+						</div>
+					  </form>
+					</div>
+				</div>
+				
+				<div class="relatedUser">
+					
+					<div class="userNameDiv">
+						<a href="user_page" ><span id="RelatedUserName">*DJ name*</span></a>
+					</div>
+					
+					<div class="userRatingDiv">
+						<div class="userRatingTitle">
+							<p><span id="RelatedUserName">*DJ name*</span>'s Rating: </p>
+						</div>
+					
+						<div class="userRatingStars">
+							<span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
+						</div>
+					</div>
+					
+				</div>
+				
+				
+			</div>
+		
+		</div>
+    </div>
+
+	
+    <div class="footer"> 
+		<p>Event Genius Prototype : Austin Cinker : 2019</p>
+	</div>
+  
+</body>
+</html>

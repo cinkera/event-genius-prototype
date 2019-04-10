@@ -1,0 +1,187 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title><%= userName %></title>
+  <meta name="description" content="User Page">
+  <meta name="author" content="Austin Cinker">
+
+  <link rel="stylesheet" type="text/css" href="/stylesheets/user.css">
+  <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+</head>
+
+<body>
+	<script src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'> </script>
+    <script src="/javascripts/global.js" > </script>
+  
+	<div class="header"> 
+
+		<div class="headCenter">
+			<h1 class="titleText"> <%= userName %> </h1>
+		</div>
+	
+		<div class = "nav">
+			<a href="../home_page"> <button type="button" id= "" class="bouncy button" onClick="" > Home Page </button></a>
+			<button class=" bouncy button" style="animation-delay:0.21s"onclick="document.getElementById('newEventModal').style.display='block'">Click here to create a new event</button>
+            
+            <!-- 				The Modal content for NEW event				-->
+			<div id="newEventModal" class="modal" >
+			  <span onclick="document.getElementById('newEventModal').style.display='none'" 
+			class="close" title="Close Modal">&times;</span>
+			<!-- Modal Content -->
+			  <form class="modal-content animate" action="/createEvent" method ="post">
+				<div class="imgcontainer">
+				  <!-- <img src="img_avatar2.png" alt="Avatar" class="avatar"> -->
+				</div>
+
+				<div class="container">
+                    <label>Event Name: <input type="text" required autofocus name="eventName" placeholder="Event name..."></label><br>
+                    <label>Event Date: <input type="date" required name="eventDate" placeholder="Event Date..."></label><br>
+                    <label>Event Time: <input type="time" required name="eventTime" placeholder="Event Time..."></label><br>
+                    <label>Event Location: <input type="text" required name="eventLocation" placeholder="Event Location... "></label><br>
+                    <label>Event Description: <textarea required rows='4' cols='25' name="eventDesc" placeholder='short description of the event...'></textarea></label><br>
+				    <br>
+				</div>
+
+				<div class="container" style="background-color:#f1f1f1">
+					<br>
+					<a href="../event_page/"><button type="submit" class="button">Create Event</button></a>
+					<button type="button" onclick="document.getElementById('newEventModal').style.display='none'" class="cancelbtn button">Cancel</button>
+				</div>
+			  </form>
+			</div>
+		</div>
+		</div>	
+	</div> 
+	
+	
+    <div class="content">
+		<div class="leftSide">
+		<p>
+			<%= userName %>'s Information
+			
+		</p>
+		  
+			<div class="ratingDiv">
+			
+				<div class="ratingTitle">
+					<p><%= userName %>'s Rating: </p>
+				</div>
+					
+				<div class="ratingStars">
+					<span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
+				</div>
+				
+			</div>
+		  
+		  <div class="userInfoDiv" >
+			<div class="socialMedias">
+			<p class="socialText"> Check me out on Social Media! </p>
+				<a href='<%= soundcloudLink %>' target="_blank"> <img src="/images/soundcloudIcon50px.png" /> </a>
+				<a href='<%= facebookLink %>' target="_blank"> <img src="/images/facebookIcon50px.png" /> </a>
+				<a href='<%= instagramLink %>' target="_blank"> <img src="/images/instagramIcon50px.png" /> </a>
+			</div>
+			
+			<div class="userContactInfo">
+				<p id="userEmailSpace">Email: <%= userEmail %> </p>
+				<p id="userPhoneSpace">Phone: <%= phoneNum %></p>
+			</div>
+			
+			<div class="userInfo">
+				<p>Name:  <%= firstName + " " + middleName + " " + lastName %></p>
+				<p>Age: </p>
+				<p>Years of experience: </p>
+				<p>Bio: <%= userBio %></p>
+				<button class="button" onclick="document.getElementById('editInfoModal').style.display='block'" style="bottom: 5px;">Edit info</button>
+				<!-- 				The Modal content for  NEW Vendor		-->
+				<div id="editInfoModal" class="modal" >
+				  <span onclick="document.getElementById('editInfoModal').style.display='none'" 
+				class="close" title="Close Modal">&times;</span>
+				  <!-- Modal Content -->
+				  <form class="modal-content animate" action='/updateUserInfo/<%= userName %>' method="post">
+					<div class="imgcontainer">
+					  <!-- <img src="img_avatar2.png" alt="Avatar" class="avatar"> -->
+					</div>
+					<div class="container">
+                        <label>Edit User Name: <input type="text"  autofocus name="editUserName" value='<%= userName %>'></label><br>
+					    <label>Edit First Name: <input type="text" name="editFirstName" value='<%= firstName %>'></label><br>
+						<label>Edit Middle Name: <input type="text" name="editMiddleName" value='<%= middleName %>'></label><br>
+						<label>Edit Last Name: <input type="text"  name="editLastName" value='<%= lastName %>'></label><br>
+						<label>Edit Email: <input type="email"  name="editEmail" value='<%= userEmail %>'></label><br>
+                        <label>Edit Phone Number: <input type="tel"  name="editPhone1" value='<%= phoneNum %>'></label><br>
+                        <label>Edit Bio: <input type="textBox" name="editUserBio" maxlength="50" value='<%= userBio %>'></label><br>
+                        <!----
+						<label>Edit Birthday: <input type="date"  name="editBirthday" placeholder="Birthday..."></label><br>
+						<label>Edit how long have you been in the business?: <input type="number" name="editUserExp" placeholder="Number of years..."></label><br>
+						<label>Edit Bio: <input type="textBox" name="editUserBio" maxlength="50" placeholder="Tell clients about yourself!"></label><br>
+						<label>Edit Vendor Type:  <select name="VendorType"></label>
+							<optgroup label="Choose a type">
+								<option value="DJ">DJ</option>
+							</optgroup>
+                        </select>
+                        -->
+						<br>
+						<p> Enter any Social Media Links Below: </p>
+						<label>Soundcloud: <input type="url" name="editSoundcloudLink" value='<%= soundcloudLink %>'></label><br>
+						<label>Facebook: <input type="url" name="editFacebookLink" value='<%= facebookLink %>'></label><br>
+						<label>Instagram: <input type="url" name="editInstagramLink" value='<%= instagramLink %>'></label><br>
+					</div>
+					<div class="container" style="background-color:#f1f1f1">
+						<br>
+						<a href="../user_page/<%= userName %>"><button type="submit" class="button" >Update User</button></a>
+					  <button type="button" onclick="document.getElementById('editInfoModal').style.display='none'" class="cancelbtn button">Cancel</button>
+					</div>
+				  </form>
+				</div>
+			</div>
+			
+			
+		  </div>
+			
+		</div>
+		
+		<div class="centerContent">
+		<p>Current Events</p>
+		
+		</div>
+		
+		<div class = "rightSide">
+			
+			<div class="pastEventsDiv">
+				
+				<p> Past Events</p>
+				
+				<div class="pastEvent">
+					
+					<div class="eventNameDiv">
+						<a href="../event_page" ><span id="pastEventName">*Event name*</span></a>
+					</div>
+					
+					<div class="eventRatingDiv">
+						<div class="eventRatingTitle">
+							<p><span id="pastEventName">*Event name*</span>'s Rating: </p>
+						</div>
+					
+						<div class="eventRatingStars">
+							<span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
+						</div>
+					</div>
+					
+				</div>
+								
+			</div>
+			
+		</div>
+
+    </div>
+
+	
+    <div class="footer"> 
+		<p>Event Genius Prototype : Austin Cinker : 2019</p>
+	</div>
+  
+</body>
+</html>

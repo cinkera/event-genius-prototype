@@ -1,0 +1,158 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Event Genius</title>
+  <meta name="description" content="Home Page">
+  <meta name="author" content="Austin Cinker">
+
+  <link rel="stylesheet" href="/stylesheets/home.css">
+
+</head>
+
+<body>
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'> </script>
+    <script src="/javascripts/global.js" > </script>
+  
+	<div class="header"> 
+	
+		<div class="headCenter">
+			<h1 class="titleText"> Welcome to Event Genius! </h1>
+		</div>
+		
+		<div class = "nav">
+			<!-- Buttons to open the modal login forms -->
+			<button class="button" onclick="document.getElementById('id01').style.display='block'">Already a user? Login here!</button>
+			<button class="button" onclick="document.getElementById('newUserModal').style.display='block'">New User? Create account here!</button>
+			
+			<!-- 				The Modal content for  NEW user		-->
+			<div id="newUserModal" class="modal" >
+			  <span onclick="document.getElementById('newUserModal').style.display='none'" 
+			class="close" title="Close Modal">&times;</span>
+			  <!-- Modal Content -->
+			  <form class="modal-content animate" action="/adduser" method="post">
+				<div class="imgcontainer">
+				  <!-- <img src="img_avatar2.png" alt="Avatar" class="avatar"> -->
+				</div>
+
+				<div class="container">
+                  <label>User Name: <input type="text" required autofocus name="userName" placeholder="User name..."></label><br>
+                  <label>First Name: <input type="text" required name="firstName" placeholder="First name..."></label><br>
+					<label>Middle Name: <input type="text" name="middleName" placeholder="Middle name..."></label><br>
+					<label>Last Name: <input type="text" required name="lastName" placeholder="Last name..."></label><br>
+					<label>Email: <input type="email" required name="email" placeholder="Preferred email..."></label><br>
+					<label>Phone Number: <input type="tel" required name="phone1" placeholder="Preferred phone #..."></label><br>
+					<label>Birthday: <input type="date" required name="birthday" placeholder="Birthday..."></label><br>
+					<label>How long have you been in the business?: <input type="number" name="userExp" placeholder="Number of years..."></label><br>
+					
+					<label>User Type:  <select name="UserType"></label>		
+						<optgroup label="Choose a type">
+							<option value="DJ">DJ</option>
+						</optgroup>
+					</select>
+					<br>
+					<p> Enter any Social Media Links Below: </p>
+					<label>Soundcloud: <input type="url" name="soundcloudLink" placeholder="Enter Link here (optional)"></label><br>
+					<label>Facebook: <input type="url" name="facebookLink" placeholder="Enter Link here (optional)"></label><br>
+					<label>Instagram: <input type="url" name="instagramLink" placeholder="Enter Link here (optional)"></label><br>
+					
+				</div>
+
+				<div class="container" style="background-color:#f1f1f1">
+					<br>
+					<a href="user_page"><button type="submit" class="button" >Login</button></a>
+				  <button type="button" onclick="document.getElementById('newUserModal').style.display='none'" class="cancelbtn button">Cancel</button>
+				  <span class="psw">Forgot <a href="#">password?</a></span>
+				</div>
+			  </form>
+			</div>
+						
+			<!-- 			The Modal content for Login				-->
+			<div id="id01" class="modal" >
+			  <span onclick="document.getElementById('id01').style.display='none'" 
+			class="close" title="Close Modal">&times;</span>
+			  <!-- Modal Content -->
+			  <form class="modal-content animate" action="">
+				<div class="imgcontainer">
+				  <!-- <img src="img_avatar2.png" alt="Avatar" class="avatar"> -->
+				</div>
+
+				<div class="container">
+				  <label for="uname"><b>Username</b></label>
+				  <input type="text" placeholder="Enter Username" name="uname" required>
+				  <br>
+
+				  <label for="psw"><b>Password</b></label>
+				  <input type="password" placeholder="Enter Password" name="psw" required>
+
+				  <br>
+				  
+				</div>
+
+				<div class="container" style="background-color:#f1f1f1">
+				<a href="client_page"><button type="submit" class="button" >Login</button></a>
+				  <label>
+					<input type="checkbox" checked="checked" name="remember"> Remember me
+				  </label>
+					<br>
+				  <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn button">Cancel</button>
+				  <span class="psw">Forgot <a href="#">password?</a></span>
+				</div>
+			  </form>
+			</div>
+		</div>	
+		
+	</div> 
+	
+	
+    <div class="content">
+	
+		<div class="leftSide" id="homeFillEventDiv">
+			
+		</div>
+		
+		<div class="centerContent" id="homeFillDiv">
+		
+		</div>
+		
+		<div class = "rightSide">
+			<input type="search" class="searchInput" results="10" name='searchBar' placeholder="Search for users or events..." onChange='searchEventsAndUsers()''>
+			
+			<div class="searchResultsDiv">
+			
+			<div id='homeSearchResults' class="searchResult">
+					
+					<div class="resultNameDiv">
+						<a href="user_page" ><span id="resultName">*result name*</span></a>
+					</div>
+					
+					<div class="resultRatingDiv">
+						<div class="resultRatingTitle">
+							<p><span id="resultName">*result name*</span>'s Rating: </p>
+						</div>
+					
+						<div class="resultRatingStars">
+							<span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
+						</div>
+					</div>
+					
+				</div>
+			
+			</div>
+		
+		</div>
+		
+		
+		
+    </div>
+
+	
+    <div class="footer"> 
+		<p>Event Genius Prototype : Austin Cinker : 2019</p>
+		
+	</div>
+  
+</body>
+</html>

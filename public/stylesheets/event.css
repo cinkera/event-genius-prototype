@@ -1,0 +1,343 @@
+/* home page css */
+/* Austin Cinker */
+
+
+html {
+    min-height: 100%;
+	padding: 5px;
+}
+	
+body {
+	background: #a7c7dc; /* Old browsers */
+	background: -moz-linear-gradient(top, #a7c7dc 0%, #85b2d3 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, #a7c7dc 0%,#85b2d3 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, #a7c7dc 0%,#85b2d3 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */ 
+	font-family:'Roboto',sans-serif;
+	font-weight: 300;
+	min-width:600px;
+	min-height:600px;
+	
+	display: flex;
+	flex-direction: column;
+}
+
+.titleText {
+	font-family:'Roboto',sans-serif;
+	font-weight: 500;
+	font-size: 18;
+}
+
+.header {
+	text-align:center;
+	height:130px; 
+	/*border: 2px solid green;*/
+	background-color: #6b6868; 
+	padding: 5px;
+	width:99%;
+	
+	order:1;
+}
+
+.headCenter {
+	display:inline-block;
+	/* border: 2px solid green; */
+	width: 50%;
+	height: 60px;
+}
+
+.nav {
+	display:inline-block;
+	/* border: 2px solid green; */
+	width: 50%;
+	height: 35px;
+	padding: 10px;
+	top: 80px;
+}
+
+.content {
+	text-align:center;
+	width: 99%;
+	height: 650px;
+	padding: 5px;
+	overflow: auto;
+	border: 2px solid red;
+	
+	display: flex;
+	flex-direction: row;
+	order:2;
+	flex: 1 0 auto;
+}
+
+.leftSide {
+	margin: 10px;
+	padding: 10px;
+	width: 30%;
+	height: 90%;
+    border: 2px solid green;
+    overflow: auto;
+	
+	display: flex;
+	flex-grow: 1;
+	flex-direction: column;
+	order:1;
+}
+
+
+.ratingDiv {
+	border: 1px solid orange;
+	margin:5px;
+	Padding:5px;
+	
+	display: flex;
+	flex-direction: row;
+	flex-grow: 1;
+}
+
+.ratingTitle {
+	/*border: 1px solid yellow;*/
+	flex-grow: 1;
+}
+
+.ratingStars {
+	padding-top:15px;
+	/*border: 1px solid blue;*/
+	flex-grow: 1;
+}
+
+.eventInfoDiv {
+	text-align: left;
+	border: 1px solid black; 
+	padding: 5px;
+	margin: 5px;
+	
+	flex-grow: 3;
+}
+
+.centerContent {
+	margin: 10px;
+	padding: 10px;
+	width: 30%;
+	height: 90%;
+    border: 2px solid pink;
+    overflow: auto;
+	
+	flex-shrink: 1; 
+	order: 2;
+}
+
+.rightSide {
+	margin: 10px;
+	padding: 10px;
+	width: 30%;
+	height: 90%;
+    border: 2px solid orange;
+    overflow: auto;
+	
+	/*flex-grow: 1;*/
+	order:3;
+}
+
+.searchResults {
+	background-color: #efefef;
+	padding: 5px;
+	margin: 5px;
+	border: 1px solid blue;
+	width: 98%; 
+    height: 50%;
+    
+	
+	flex-grow: 1;
+}
+
+
+.relatedUsersDiv {
+	height: 95%;
+	margin: 5px;
+	padding: 5px;
+	border: 1px solid blue;
+	overflow-y: scroll;
+	
+	display: flex;
+	flex-direction: column;
+}
+
+.relatedUser {
+	height: 110px;
+	margin: 5px;
+	padding: 5px;
+	border: 1px solid yellow;
+	
+	display: flex;
+	flex-direction: column;
+	flex-shrink: 0;
+	order: 1;
+}
+
+.userNameDiv {
+	height: 50px;
+	width: 90%;
+	margin: 5px;
+	padding: 5px;
+	border: 1px solid red;
+	
+	order: 1;
+}
+
+.userRatingDiv {
+	height: 50px;
+	width: 90%;	
+	margin: 0px 5px; 
+	padding: 5px;
+	border: 1px solid green;
+	
+	display: flex;
+	flex-direction: row;
+	order: 2;
+}
+
+.userRatingTitle {
+	font-size: 80%;
+	height: 90%;
+	width: 50%;
+	
+	order: 1;
+}
+
+.userRatingStars {
+	padding-top:10px;
+	height:90%;
+	width: 50%;
+	
+	order: 2;
+}
+	
+.footer {
+	text-align:center;
+	width:99%;
+	overflow:hidden;
+	border: 2px solid blue;
+	padding: 5px;
+	
+	flex-shrink: 0;
+	order:3;
+}
+
+.button{
+	background-color: #A4C5DC;
+	display:inline-block;
+	padding:0.35em 1.2em;
+	border:0.1em solid black;
+	margin:0 0.3em 0.3em 0;
+	border-radius:0.12em;
+	box-sizing: border-box;
+	text-decoration:none;
+	font-family:'Roboto',sans-serif;
+	font-weight:300;
+	color: black;
+	text-align:center;
+	transition: all 0.2s;
+}
+	
+.button:hover{
+	color: black;
+	background-color: #85b2d3;
+	cursor: pointer;
+}
+
+.bouncy {
+	animation:bouncy 5s infinite linear;
+	position:relative;
+}
+
+@keyframes bouncy {
+	0%{top:0em}
+	40%{top:0em}
+	43%{top:-0.9em}
+	46%{top:0em}
+	48%{top:-0.4em}
+	50%{top:0em}
+	100%{top:0em}
+}
+
+
+/* The Modal (background) */
+.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 75%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0,0,0); /* Fallback color */
+	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+	padding-top: 60px;
+	padding: 5px;
+	background-color: #fefefe;
+	margin: 5px auto; /* 15% from the top and centered */
+	border: 1px solid #888;
+	width: 75%; /* Could be more or less, depending on screen size */
+	height: 80%;
+}
+
+/* The Close Button */
+.close {
+  /* Position it in the top right corner outside of the modal */
+  position: absolute;
+  right: 25px;
+  top: 0; 
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+/* Close button on hover */
+.close:hover,
+.close:focus {
+  color: red;
+  cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)} 
+  to {-webkit-transform: scale(1)}
+}
+
+@keyframes animatezoom {
+  from {transform: scale(0)} 
+  to {transform: scale(1)}
+}
+
+input {
+	padding: 5px;
+	margin: 5px;
+}
+
+input:not(:focus):invalid {
+  outline: 2px solid red;
+}
+input:focus:invalid {
+  outline: 2px solid blue;
+}
+
+.hint {
+    font-size: .8em;
+    color: red;
+}
+
+.element::-webkit-scrollbar { width: 0 !important } /* -webkit- (Chrome, Safari, newer versions of Opera): */
+.element { overflow: -moz-scrollbars-none; } /* -moz- (Firefox): */
+.element { -ms-overflow-style: none; } /* -ms- (Internet Explorer +10): */
+
