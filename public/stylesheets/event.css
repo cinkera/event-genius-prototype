@@ -137,14 +137,20 @@ body {
 	order:3;
 }
 
+.container {
+    /* border: 1px solid green; */
+    height: 90%;
+    /* overflow: scroll; */
+}
+
 .searchResults {
 	background-color: #efefef;
 	padding: 5px;
-	margin: 5px;
+	margin: 5px auto;
 	border: 1px solid blue;
-	width: 98%; 
-    height: 50%;
-    
+	width: 50%; 
+    height: 90%;
+    overflow: scroll;
 	
 	flex-grow: 1;
 }

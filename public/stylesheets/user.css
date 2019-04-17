@@ -145,6 +145,16 @@ body {
 	display: flex;
 	flex-direction: column;
 }
+.currentEventsDiv {
+	height: 95%;
+	margin: 5px;
+	padding: 5px;
+	border: 1px solid blue;
+	overflow-y: scroll;
+	
+	display: flex;
+	flex-direction: column;
+}
 
 .pastEvent {
 	height: 110px;

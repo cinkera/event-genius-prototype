@@ -156,7 +156,7 @@ body {
 	width: 30%;
 	height: 90%;
     border: 2px solid orange;
-    overflow: auto;
+    /*overflow: auto; */
 	
 	order:3;
 }
