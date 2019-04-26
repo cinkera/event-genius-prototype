@@ -19,6 +19,9 @@
     <script src="/javascripts/users.js" > </script>
   
 	<div class="header"> 
+		<div class = "EGlogo">
+			<a href='../home_page'> <img src="/images/EG-logo100px.png" /> </a>
+		</div>
 
 		<div class="headCenter">
 			<h1 class="titleText"> <%= userName %> </h1>
@@ -39,13 +42,13 @@
 				</div>
 
 				<div class="container">
-                    <input type="hidden" name="eventsCreator" value='<%= userName %>'>
-                    <label>Event Name: <input type="text" required autofocus name="eventName" placeholder="Event name..."></label><br>
-                    <label>Event Date: <input type="date" required name="eventDate" placeholder="Event Date..."></label><br>
-                    <label>Event Time: <input type="time" required name="eventTime" placeholder="Event Time..."></label><br>
-                    <label>Event Location: <input type="text" required name="eventLocation" placeholder="Event Location... "></label><br>
-                    <label>Event Description: <textarea required rows='4' cols='25' name="eventDesc" placeholder='short description of the event...'></textarea></label><br>
-				    <br>
+						<input type="hidden" name="eventsCreator" value='<%= userName %>'>
+						<label>Event Name: <input type="text" required autofocus name="eventName" placeholder="Event name..."></label><br>
+						<label>Event Date: <input type="date" required name="eventDate" placeholder="Event Date..."></label><br>
+						<label>Event Time: <input type="time" required name="eventTime" placeholder="Event Time..."></label><br>
+						<label>Event Location: <input type="text" required name="eventLocation" placeholder="Event Location... "></label><br>
+						<label>Event Description: <textarea required rows='4' cols='25' name="eventDesc" placeholder='short description of the event...'></textarea></label><br>
+						<br>
 				</div>
 
 				<div class="container" style="background-color:#f1f1f1">
@@ -66,9 +69,9 @@
 			<%= userName %>'s Information
 			
 		</p>
-		  
+		  <!--
 			<div class="ratingDiv">
-			
+			 
 				<div class="ratingTitle">
 					<p><%= userName %>'s Rating: </p>
 				</div>
@@ -76,8 +79,9 @@
 				<div class="ratingStars">
 					<span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
 				</div>
-				
+			
 			</div>
+		-->
 		  
 		  <div class="userInfoDiv" >
 			<div class="socialMedias">

@@ -17,14 +17,16 @@
     <script src="/javascripts/events.js" > </script>
   
 	<div class="header"> 	
-			
+		<div class = "EGlogo">
+				<a href='../home_page'> <img src="/images/EG-logo100px.png" /> </a>
+		</div>
 		<div class="headCenter">
 			<h1 class="titleText"> <%= eventName %></h1>
 		</div>
 		
 		<div class = "nav">
             <a href="../home_page"> <button type="button" id="head1" class="bouncy button" onClick="" > Home Page </button></a>
-            <p>Created by <a href='../user_page/<%= eventsCreator %>'><%= eventsCreator %></a></p>
+            <p>Created by:<a href='../user_page/<%= eventsCreator %>'><%= eventsCreator %></a></p>
 		</div>	
 
 	</div> 
@@ -148,7 +150,7 @@
 				<!-- this is the creator of the event, they cannot be added or deleted-->
                     <div class="relatedUser">
                         <div class="userNameDiv">
-                            <p class="">Creator of this event: <a href="../user_page/<%= eventsCreator %>"> <%= eventsCreator %></a></p>
+                            <p class="">Event creator: <a href="../user_page/<%= eventsCreator %>"> <%= eventsCreator %></a></p>
                         </div>
                         <div class="userRatingDiv">
                             <div class="userRatingTitle">

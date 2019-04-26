@@ -1,9 +1,7 @@
 //functions for only event_page.ejs
 
 function fillEventsUsers(relatedUsers, eventsCreator) {
-   // console.log("... in fillEventsUsers, related Users: " + JSON.stringify(relatedUsers));
     relatedUsers = relatedUsers.split(",");
-    //console.log(relatedUsers, relatedUsers.length);
     var tableContent = "";
 
     for(i = 0; i < relatedUsers.length; i++) {
@@ -19,6 +17,7 @@ function fillEventsUsers(relatedUsers, eventsCreator) {
             tableContent += '</div></div></div>';
         }
     }
+    // fills the related users into the template
     $('#related').append(tableContent);
 }
 
@@ -50,8 +49,9 @@ function fillAllUsers(allUsers, eventsCreator, relatedUsers) {
         // reset bool as false for next user
         inRelated = false;
     });
-        
-    //});
+    if(tableContent == "") {
+        tableContent += '<p>No users to add to this event</p>';
+    }
     // Inject the whole content string into our existing HTML USERS div
     $('#eventsSearchResults').append(tableContent);
 }
@@ -60,7 +60,6 @@ function relatedUsersToRemove(relatedUsers, eventsCreator) {
     relatedUsers = relatedUsers.split(",");
     var tableContent = "";
     $.each(relatedUsers, function(){
-        //console.log("... this: " + this + " , eventsCreator: "+ eventsCreator);
         if(this != "" && this != eventsCreator){
             tableContent += '<div class="relatedUser">';
             tableContent += '<div class="userNameDiv">';
@@ -73,6 +72,7 @@ function relatedUsersToRemove(relatedUsers, eventsCreator) {
             tableContent += '</div></div></div>';
         }
     });
+    // fill the related users info on the event
     $('#relatedUsersRemove').append(tableContent);
 }
 

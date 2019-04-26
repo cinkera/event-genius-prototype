@@ -29,21 +29,20 @@ function populateHomePage() {
                 tableContent += '<div class="userRatingDiv"><div class="userRatingTitle">';
                 tableContent += '<p> ' + this.userName + '\'s Rating: </p></div>';
                 tableContent += '<div class="userRatingStars"> ';
-                tableContent += '<span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div></div></div>';
+                //tableContent += '<span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div></div></div>';
                 tableContent += '</div></div></div>';
         });
         
         // For each item in our JSON, add a table row and cells to the content string
         $.each(data.events, function(){
             //if(this.userName != ":eventName" && this.eventName != "home_page.json" && this.eventName != null) {
-                //console.log("... event name: " + this.eventName);
                 eventContent += '<div class="userDiv">';
                 eventContent += '<div class="userNameDiv">';
                 eventContent += '<a href="event_page/' + this.eventName + '">' + this.eventName + '</a></div>';
                 eventContent += '<div class="userRatingDiv"><div class="userRatingTitle">';
-                eventContent += '<p> ' + this.eventName + '\'s Rating: </p></div>';
+                eventContent += '<p>Date: ' + this.eventDate + '<br>Time: ' + this.eventTime + '<br>Location: ' + this.eventLocation + '</p></div>';
                 eventContent += '<div class="userRatingStars"> ';
-                eventContent += '<span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div></div></div>';
+                eventContent += /*'<span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>*/'</div></div></div>';
             //}
         });
 

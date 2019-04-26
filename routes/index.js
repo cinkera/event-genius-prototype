@@ -1,14 +1,5 @@
 var express = require('express');
 var router = express.Router();
-
-/*home search functionality
-document.getElementById(searchBar).addEventListener("change", searchScript);
-function searchScript() {
-    res.send($(searchInput.value));
-
-}
-*/
-
 /* =======================================   ROUTING STARTS     ===========================================
 
 /* ------------------------------------------------- GET home page. --------------------------- */
@@ -17,7 +8,6 @@ router.get('/home_page', function(req, res) {
     var Ucollection = db.get('usercollection');
     var Ecollection = db.get('eventcollection');
     console.log("\n====> Home Page");
-    console.log("hi jenny !");
     res.render('home_page');
 });
 
@@ -47,20 +37,22 @@ router.get('/home_page.json', function(req, res) {
     var db = req.db;
     var Ucollection = db.get('usercollection');
     var Ecollection = db.get('eventcollection');
-    Ucollection.find({},{},function(e,docs){
-        allUsers = docs;  
-    });
+
     Ecollection.find({},{},function(e,docs){
         allEvents = docs;
-        if(allUsers.length == 0) { // On reload, users would become "". This fixes that and sends the correct data.
-            Ucollection.find({},{},function(e,docs){
-                allUsers = docs;
-                console.log("... allUsers.length was 0, is now: " + allUsers.length);
+        Ucollection.find({},{},function(e,docs){
+            allUsers = docs;  
+            if(allUsers.length == 0) { //Sometimes still sends allUsers as empty?
+                Ucollection.find({},{},function(e,docs){
+                    allUsers = docs;
+                    console.log("... allUsers.length was 0, is now: " + allUsers.length);
+                    res.send({ users: allUsers, events: allEvents });
+                });
+            }
+            else {
                 res.send({ users: allUsers, events: allEvents });
-            });
-        } else {
-            res.send({ users: allUsers, events: allEvents });
-        }
+            }   
+        });
     });
 }); 
 
@@ -106,8 +98,8 @@ router.get('/user_page/:userName', function(req, res) {
                     if(e) { console.log("... did not find event " + docs.userEvents + " in the database."); } 
                     else {  
                         doc.forEach((ele) => {
-                            console.log("... event info: " + ele.eventName + ", " + ele.eventDate + ", " + ele.eventTime);
-                            usersEvents[counter] = ele.eventName + "|" + ele.eventDate + "|" + ele.eventTime;
+                            console.log("... event info: " + ele.eventName + ", " + ele.eventDate + ", " + ele.eventTime + "," + ele.eventLocation);
+                            usersEvents[counter] = ele.eventName + "|" + ele.eventDate + "|" + ele.eventTime + "|" + ele.eventLocation;
                             counter++;
                         });
                     }
@@ -227,13 +219,11 @@ router.post('/updateUserInfo/:userName', function(req, res) {
     var soundcloudLink = req.body.editSoundcloudLink;
     var facebookLink = req.body.editFacebookLink;
     var instagramLink = req.body.editInstagramLink;
-   // var userEvents = req.body.editUserEvents;
-    //console.log("... userEvents: " + userEvents);
 
 
      Ucollection.find({userName: {$eq:userName}}, (err, docs) => { 
-        // if docs = "", name exists in DB already. Don't create account
-        if(docs != "") {
+        // if docs = "", name exists in DB already AND new UN != old UN, Don't create account
+        if(docs != "" && userName != oldUserName) {
                 console.log("this name DOES exist in the db");
                 // --------------------------------- CREATE ERROR PAGE TO SEND
                 res.send("This user name already exists in the database!");
@@ -256,7 +246,6 @@ router.post('/updateUserInfo/:userName', function(req, res) {
                         "soundcloudLink" : soundcloudLink, 
                         "instagramLink" : instagramLink, 
                         "facebookLink" : facebookLink}},
-                        //},$push:{"userEvents":userEvents}},
                 {new: true}, (err, doc) => {
                     if (err) {
                         console.log("Something wrong when updating data!");
@@ -335,7 +324,6 @@ router.post('/adduser', function(req, res) {
 router.post('/createEvent', function(req, res) {
     console.log("\n====> Create Event");
     var db = req.db; // Set our internal DB variable
-    //console.log("... req.body = " + JSON.stringify(req.body));
     // Get our form values. These rely on the "name" attributes
     var eventsCreator = req.body.eventsCreator
     var eventName = req.body.eventName;
@@ -345,11 +333,11 @@ router.post('/createEvent', function(req, res) {
     var eventDesc = req.body.eventDesc;
     var eventsCreator = req.body.eventsCreator;
     var relatedUsers = [req.body.eventsCreator];
-    // Set our collection
+    // Set our collections
     var Ecollection = db.get('eventcollection');
     var Ucollection = db.get('usercollection');
 
-    //if Name is already in database, error 
+    // if Name is already in database, error 
     // AND query for only eventCreator's events, make sure 1 creator cannot create 2 same events, 
     // but 2 different creartors could create same named event
     Ecollection.find({eventName: {$eq:eventName}}, (err, docs) => { 
@@ -408,14 +396,14 @@ router.post('/updateEventInfo/:eventName', function(req, res) {
     var eventsCreator = req.body.editEventsCreator;
 
     Ecollection.find({eventName: {$eq:eventName}}, (err, docs) => { 
-        // if docs = "", name exists in DB already. Don't create account
-        if(docs != "") {
+        // if docs = "" name exists in DB already don't create account.If they edit but keep same name allow it.
+        if(docs != "" && eventName != oldEventName) {
             console.log("... this name DOES exist in the db");
             // --------------------------------- CREATE ERROR PAGE TO SEND
             res.send("This event name already exists in the database!");
         }
         else {
-            // Event name doesn't exist in DB yet, update in the DB
+            // Event name doesn't exist in DB yet OR is updating the same event, update in the DB
             Ecollection.findOneAndUpdate(
                 {eventName: {$eq:oldEventName}}, // Query to find the event to update
                 {$set: {         // Update all values (needs error checking/val)
@@ -433,9 +421,7 @@ router.post('/updateEventInfo/:eventName', function(req, res) {
                     res.redirect("../event_page/" + eventName);
                 });
         }
-
     });
-    
 });
 
 /* ----------------------------------------- POST to addUsersToEvent Service -------------------------------- */
@@ -444,7 +430,8 @@ router.post('/addUsersToEvent/:eventName', function(req, res) {
     var checkedUsers = JSON.stringify(req.body).split(",");
     var usersToAdd = [];
     var currevent = req.params.eventName;
-    var collection = req.db.get('eventcollection');
+    var ecollection = req.db.get('eventcollection');
+    var ucollection = req.db.get('usercollection');
 
     //this will get the userNames that were checked to add to the db, and load them into array
     checkedUsers.forEach((ele)=> {
@@ -453,15 +440,21 @@ router.post('/addUsersToEvent/:eventName', function(req, res) {
         var user = ele.split("|");
         usersToAdd.push(user[0]);
     });
-    console.log("... usersToAdd: " + usersToAdd);
+    //add each user to the event, add the event to their userEvents array
     usersToAdd.forEach((ele) => {
-        collection.findOneAndUpdate({eventName: {$eq:currevent}},{$push: {"relatedUsers" : ele}},(err, doc) => {
+        ecollection.findOneAndUpdate({eventName: {$eq:currevent}},{$push: {"relatedUsers" : ele}},(err, doc) => {
             if (err) {
-                console.log("... Something wrong when updating data!");
+                console.log("... Something wrong when adding related user to event!");
             }
+            else console.log("... user " + ele + " added to event " + currevent);
+        });
+        ucollection.findOneAndUpdate({userName: {$eq:ele}}, {$push: {"userEvents" : currevent}}, (err, doc) => {
+            if (err) {
+                console.log("... Something wrong when adding event to users related events!");
+            }
+            else console.log("... event " + currevent + " added to user " + ele);
         });
     });
-    console.log("... redirecting to: ../event_page/" + currevent);
     res.redirect("../event_page/" + currevent);
 });
 
@@ -471,7 +464,8 @@ router.post('/removeUsersFromEvent/:eventName', function(req, res) {
     var checkedUsers = JSON.stringify(req.body).split(",");
     var usersToAdd = [];
     var currevent = req.params.eventName;
-    var collection = req.db.get('eventcollection');
+    var ecollection = req.db.get('eventcollection');
+    var ucollection = req.db.get('usercollection');
 
     //this will get the userNames that were checked to add to the db, and load them into array
     checkedUsers.forEach((ele)=> {
@@ -480,19 +474,23 @@ router.post('/removeUsersFromEvent/:eventName', function(req, res) {
         var user = ele.split("|");
         usersToAdd.push(user[0]);
     });
-    console.log("... usersToAdd: " + usersToAdd);
+    //for each user to remove, remove them from event and rremove event from their userEvents array
     usersToAdd.forEach((ele) => {
-        collection.findOneAndUpdate({eventName: {$eq:currevent}},{$pull: {"relatedUsers" : ele}},(err, doc) => {
+        ecollection.findOneAndUpdate({eventName: {$eq:currevent}},{$pull: {"relatedUsers" : ele}},(err, doc) => {
             if (err) {
                 console.log("... Something wrong when updating data!");
             }
+            else console.log("... user " + ele + " removed from event " + currevent);
+        });
+        ucollection.findOneAndUpdate({userName: {$eq:ele}}, {$pull: {"userEvents" : currevent}}, (err, doc) => {
+            if (err) {
+                console.log("... Something wrong when removing event to users related events!");
+            }
+            else console.log("... event " + currevent + " removed from user " + ele);
         });
     });
-    console.log("... redirecting to: ../event_page/" + currevent);
     res.redirect("../event_page/" + currevent);
 });
 
 // ==============================================      ROUTING ENDS        =====================================================
-
-
 module.exports = router;

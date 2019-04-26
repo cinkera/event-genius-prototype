@@ -1,10 +1,10 @@
-//functions for only user_page.ejs
+//functions for user_page.ejs
 
 function printUserEvents(userEvents) {
     let currentEvents = ""; 
     let passedEvents = "";
+    //splits the array of "," separated events into an array of event objects that are "|" separated
     userEvents = userEvents.split(",");
-    //console.log("... userEvents: " + userEvents);
     $.each(userEvents, function() {
         // splits event on |, new form is name|date|time 
         eventString = this.split("|");
@@ -13,59 +13,37 @@ function printUserEvents(userEvents) {
         var now = new Date();
         now.setHours(0,0,0,0);
 
-        //YYYY-MMM-DD, this splits on - to get yyyy, mm, dd to compare against current
-        let checkDate = eventString[1].split("-");
+        //format the event's date into a Date se we can easily check if current or past
+        var newDate = new Date(eventString[1]);
 
-        // An event will pass the day after the event, not after the specific times
-        /* ------- Printing out event dates info and current event info ----------
-        console.log("... event year: " + checkDate[0] + ", checking against: " + now.getFullYear());
-        console.log("... event month: " + checkDate[1] + ", checking against: " + now.getMonth());
-        console.log("... event date: " + checkDate[2] + ", checking against: " + now.getDate());
-        */
-        //if year of event < current year
-        if(checkDate[0] < now.getFullYear())
-        {
-            //add this event info to passedEvents
-            passedEvents += '<div class="pastEvent"><div class="eventNameDiv">';
-            passedEvents += '<a href="../event_page/' + eventString[0] + '" >' + eventString[0] + '</a></div>';
-            passedEvents += '<div class="eventRatingDiv"><div class="eventRatingTitle">';
-            passedEvents += '<p>Date: ' + eventString[1] + '</p></div>';
-            passedEvents += '<div class="eventRatingStars"><p>Time: ' + eventString[2] + '</p></div></div></div>';
-        }
-        //if month of event > current month
-        else if(checkDate[1] < now.getMonth())
-        {
-            //add this event info to passedEvents
-            passedEvents += '<div class="pastEvent"><div class="eventNameDiv">';
-            passedEvents += '<a href="../event_page/' + eventString[0] + '" >' + eventString[0] + '</a></div>';
-            passedEvents += '<div class="eventRatingDiv"><div class="eventRatingTitle">';
-            passedEvents += '<p>Date: ' + eventString[1] + '</p></div>';
-            passedEvents += '<div class="eventRatingStars"><p>Time: ' + eventString[2] + '</p></div></div></div>';  
-        }
-        //if day of event < current day
-        else if(checkDate[2] < now.getDate())
-        {
-            //add this event info to passedEvents
-            passedEvents += '<div class="pastEvent"><div class="eventNameDiv">';
-            passedEvents += '<a href="../event_page/' + eventString[0] + '" >' + eventString[0] + '</a></div>';
-            passedEvents += '<div class="eventRatingDiv"><div class="eventRatingTitle">';
-            passedEvents += '<p>Date: ' + eventString[1] + '</p></div>';
-            passedEvents += '<div class="eventRatingStars"><p>Time: ' + eventString[2] + '</p></div></div></div>';
-        }
-        else { 
-            //This event has not happened yet, add this event info to currentEvents
+        if(now < newDate) {
+            //the date has not passed yet, throw it in current events
             currentEvents += '<div class="pastEvent"><div class="eventNameDiv">';
             currentEvents += '<a href="../event_page/' + eventString[0] + '" >' + eventString[0] + '</a></div>';
             currentEvents += '<div class="eventRatingDiv"><div class="eventRatingTitle">';
-            currentEvents += '<p>Date: ' + eventString[1] + '</p></div>';
-            currentEvents += '<div class="eventRatingStars"><p>Time: ' + eventString[2] + '</p></div></div></div>';
+            currentEvents += '<p>Date: ' + eventString[1] + '<br>Time: ' + eventString[2] + '<br>Location: ' + eventString[3] + '</p></div>';
+            currentEvents += '<div class="eventRatingStars"></div></div></div>'; 
+        }
+        else {
+            //the date has passed, throw it in passed events
+            passedEvents += '<div class="pastEvent"><div class="eventNameDiv">';
+            passedEvents += '<a href="../event_page/' + eventString[0] + '" >' + eventString[0] + '</a></div>';
+            passedEvents += '<div class="eventRatingDiv"><div class="eventRatingTitle">';
+            passedEvents += '<p>Date: ' + eventString[1] + '<br>Time: ' + eventString[2] + '<br>Location: ' + eventString[3] + '</p></div>';
+            passedEvents += '<div class="eventRatingStars"></div></div></div>';
         }
     });
+    
+    //if either strings to load are empty, show a message
+    if(currentEvents == "") {
+        currentEvents += '<p>No current events to show</p>';
+    }
+    if(passedEvents == "") {
+        passedEvents += '<p>No past events to show</p>';
+    }
+
     // put events where they go on the page
     $('#currentEventsFillDiv').append(currentEvents);
     $('#passedEventsFillDiv').append(passedEvents);
 }
-
-
-
 
