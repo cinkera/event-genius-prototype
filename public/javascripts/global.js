@@ -13,24 +13,23 @@ function populateHomePage() {
   // jQuery AJAX call for JSON
   $.getJSON('home_page.json', function( data ) {
       console.log("=============> home_page.json in global populateHomePage");
-      //console.log("... data.users.length: " + data.users.length);
-      //console.log("... data.events: " + data.events);
-
         // Empty content string
         var tableContent = '<p>All Users In Database</p>';
         var eventContent = '<p>All Events In Database</p>';
       
         // For each item in our JSON, add a table row and cells to the content string
         $.each(data.users, function(){
-                //console.log("Username: " + this.userName);
+                var birthday = new Date(this.birthday);
+                var ageDifMs = Date.now() - birthday.getTime();
+                var ageDate = new Date(ageDifMs); // miliseconds from epoch
+                var age = Math.abs(ageDate.getUTCFullYear() - 1970);
                 tableContent += '<div class="userDiv">';
                 tableContent += '<div class="userNameDiv">';
                 tableContent += '<a href="user_page/' + this.userName + '">' + this.userName + '</a></div>';
                 tableContent += '<div class="userRatingDiv"><div class="userRatingTitle">';
-                tableContent += '<p> ' + this.userName + '\'s Rating: </p></div>';
+                tableContent += '<p>' + this.vendorType + '<br>Age: ' + age + '<br>Member since: ' + this.dateCreated + '</p></div>';
                 tableContent += '<div class="userRatingStars"> ';
-                //tableContent += '<span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div></div></div>';
-                tableContent += '</div></div></div>';
+                tableContent += /*'<span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>*/'</div></div></div>';
         });
         
         // For each item in our JSON, add a table row and cells to the content string

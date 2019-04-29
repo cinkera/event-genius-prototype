@@ -74,8 +74,7 @@ router.get('/search.json', function(req, res) {
         foundEvents = docs;
         console.log("... Found Events: " + foundEvents);
         res.send({ users: foundUsers, events: foundEvents });
-    });
-    
+    }); 
 }); 
 
 /* ---------------------------------------------------- GET JSON data and route to userpage/... -------------------*/
@@ -86,23 +85,24 @@ router.get('/user_page/:userName', function(req, res) {
         var Ucollection = db.get('usercollection');
         var Ecollection = db.get('eventcollection');
         var userObject = []; // for user object to be created ( only used for viewing data in cmd for testing )
-        var usersEvents = []; // need an  array of events, times and dates
+        var usersEvents = []; // need an  array of events|time|date|location
         var curruser = req.params.userName;
         Ucollection.findOne({userName: {$eq:curruser}},function(e,docs){
             if (docs) {
                 var counter = 0;
-                console.log(docs.userEvents);
                 // this code block gets the usersEvents and adds them to the array to be sent to the template page
                 // and then used in users.js to be printed onto the user's page
+                console.log("... docs.userEvents: " + docs.userEvents);
                 Ecollection.find({eventName: {$in:docs.userEvents}},function(e,doc){
                     if(e) { console.log("... did not find event " + docs.userEvents + " in the database."); } 
                     else {  
                         doc.forEach((ele) => {
-                            console.log("... event info: " + ele.eventName + ", " + ele.eventDate + ", " + ele.eventTime + "," + ele.eventLocation);
-                            usersEvents[counter] = ele.eventName + "|" + ele.eventDate + "|" + ele.eventTime + "|" + ele.eventLocation;
+                            usersEvents[counter] = ele.eventName + "|" + ele.eventDate + "|" + ele.eventTime 
+                                + "|" + ele.eventLocation + "|" + ele.eventsCreator;
                             counter++;
                         });
                     }
+                    console.log("... user events: " + usersEvents);
                     userObject = [{    
                         userID: docs._id,    
                         userName: docs.userName, 
@@ -113,10 +113,14 @@ router.get('/user_page/:userName', function(req, res) {
                         userBio: docs.userBio,
                         phoneNum: docs.phoneNum,
                         birthday: docs.birthday,
+                        vendorType: docs.vendorType,
                         soundcloudLink: docs.soundcloudLink,
                         facebookLink: docs.facebookLink,
                         instagramLink: docs.instagramLink,
-                        userEvents: usersEvents
+                        youtubeLink: docs.youtubeLink,
+                        otherLink: docs.otherLink,
+                        userEvents: usersEvents,
+                        dateCreated: docs.dateCreated
                     }];
                     console.log(userObject);
                     res.render('user_page', {
@@ -129,12 +133,18 @@ router.get('/user_page/:userName', function(req, res) {
                         userBio: docs.userBio,
                         phoneNum: docs.phoneNum,
                         birthday: docs.birthday,
+                        vendorType: docs.vendorType,
                         soundcloudLink: docs.soundcloudLink,
                         facebookLink: docs.facebookLink,
                         instagramLink: docs.instagramLink,
-                        userEvents: usersEvents
+                        youtubeLink: docs.youtubeLink,
+                        otherLink: docs.otherLink,
+                        userEvents: usersEvents, 
+                        dateCreated: docs.dateCreated
+                        /// USER EVENTS IS RENDERING INCORRECTLY ON USERPAGE AND EVENTS TO REMOVE
                     });
                 });
+                
             }
         });
     }   
@@ -149,47 +159,75 @@ router.get('/event_page/:eventName', function(req, res) {
         var Ucollection = db.get('usercollection');
         var eventObject = [];
         var allUsers = [];
+        var relatedUsersArr = [];
         var currevent = req.params.eventName;
         Ucollection.find({},{},function(e,docs){
             docs.forEach(ele => {
                 allUsers += ele.userName + ",";  
             });
         });
-
+        // we need to turn related users from ['username', ...] to ['username|vendorType|birthday|dateCreated] 
         // --------------- using findOne returns to stack, reformat this *******************
         Ecollection.findOne({eventName: {$eq:currevent}},function(e,docs){
             if (docs) {
-                eventObject = [{    
-                    eventID: docs._id,    
-                    eventName: docs.eventName, 
-                    eventTime: docs.eventTime,
-                    eventDate: docs.eventDate,
-                    eventLocation: docs.eventLocation, 
-                    eventDesc: docs.eventDesc, 
-                    eventsCreator: docs.eventsCreator,
-                    relatedUsers: docs.relatedUsers,
-                    allUsers: allUsers   
-                }];
-                console.log(eventObject);
-                console.log("...allUsers.length: " + allUsers.length);
-                if(allUsers.length == 0) {
-                    Ucollection.find({},{},function(e,docs){
-                        docs.forEach(ele => {
-                            allUsers += ele.userName + ",";  
+                // get an events related users
+                Ucollection.find({userName: {$in:docs.relatedUsers}}, function(e, user) {
+                    if(e) {}//error
+                    else {
+                        // for each related user, fill their info to array to be handled by .js
+                        user.forEach((ele) => {
+                            relatedUsersArr.push(ele.userName + "|" + ele.vendorType + "|" + ele.birthday + "|" + ele.dateCreated);
+                        });
+                    }
+                    // clear allusers to be replaced with new format
+                    allUsers = [];
+                    //find all users in DB
+                    Ucollection.find({},{}, function(e, user) {
+                        if(e) {
+                            console.log("... error when finding allUsers");
+                        }
+                        else {
+                            //for each user in db, add them to array with correct format to be handled by .js
+                            user.forEach((ele) => {
+                                allUsers += ele.userName + "|" + ele.vendorType + "|" + ele.birthday + "|" + ele.dateCreated + ",";
+                            });
+                        }
+                        eventObject = [{    
+                            eventID: docs._id,    
+                            eventName: docs.eventName, 
+                            eventTime: docs.eventTime,
+                            eventDate: docs.eventDate,
+                            eventLocation: docs.eventLocation, 
+                            eventDesc: docs.eventDesc, 
+                            eventsCreator: docs.eventsCreator,
+                            relatedUsers: relatedUsersArr,
+                            allUsers: allUsers   
+                        }];
+                        console.log(eventObject);
+                        // sometimes all users = "", this will refill it correctly
+                        if(allUsers.length == 0) {
+                            Ucollection.find({},{},function(e,docs){
+                                docs.forEach(ele => {
+                                    allUsers.push(ele.userName + "|" + ele.vendorType + "|" + ele.birthday + "|" + ele.dateCreated);
+                                });
+                            });
+                        }
+                        /*console.log("... relatedUsersArr: " + relatedUsersArr);
+                        console.log("... allUsers: " + allUsers); */
+                        res.render('event_page', {
+                            eventID: docs._id,    
+                            eventName: docs.eventName, 
+                            eventTime: docs.eventTime,
+                            eventDate: docs.eventDate, 
+                            eventLocation: docs.eventLocation, 
+                            eventDesc: docs.eventDesc,
+                            eventsCreator: docs.eventsCreator,
+                            relatedUsers: relatedUsersArr,
+                            allUsers: allUsers                    
                         });
                     });
-                }
-                res.render('event_page', {
-                    eventID: docs._id,    
-                    eventName: docs.eventName, 
-                    eventTime: docs.eventTime,
-                    eventDate: docs.eventDate, 
-                    eventLocation: docs.eventLocation, 
-                    eventDesc: docs.eventDesc,
-                    eventsCreator: docs.eventsCreator,
-                    relatedUsers: docs.relatedUsers,
-                    allUsers: allUsers                    
-                }); 
+                     
+                });    
             } else {
                 console.log("... did not find event " + currevent + " in the database.");
                 console.log("... redirecting to home_page");
@@ -207,6 +245,7 @@ router.post('/updateUserInfo/:userName', function(req, res) {
     var oldUserName = req.params.userName;
 
     // Get our form values. These rely on the "name" attributes check that they arent equal or null
+    console.log("... req.body.vendorType: \'"  + req.body.vendorType + "\'");
     var userName = req.body.editUserName;
     var firstName = req.body.editFirstName;
     var middleName = req.body.editMiddleName;
@@ -214,12 +253,13 @@ router.post('/updateUserInfo/:userName', function(req, res) {
     var userEmail = req.body.editEmail;
     var phoneNum = req.body.editPhone1;
     var userBio = req.body.editUserBio;
-    var userExp = req.body.editUserExp;
     var birthday = req.body.editBirthday;
     var soundcloudLink = req.body.editSoundcloudLink;
     var facebookLink = req.body.editFacebookLink;
     var instagramLink = req.body.editInstagramLink;
-
+    var youtubeLink = req.body.editYoutubeLink;
+    var otherLink = req.body.editOtherLink;
+    var vendorType = req.body.vendorType;
 
      Ucollection.find({userName: {$eq:userName}}, (err, docs) => { 
         // if docs = "", name exists in DB already AND new UN != old UN, Don't create account
@@ -241,11 +281,14 @@ router.post('/updateUserInfo/:userName', function(req, res) {
                         "useremail" : userEmail, 
                         "phoneNum" : phoneNum, 
                         "userBio": userBio,
-                        "userExp": userExp,
                         "birthday" : birthday, 
+                        "vendorType": vendorType,
                         "soundcloudLink" : soundcloudLink, 
                         "instagramLink" : instagramLink, 
-                        "facebookLink" : facebookLink}},
+                        "facebookLink" : facebookLink, 
+                        "youtubeLink": youtubeLink, 
+                        "otherLink": otherLink
+                    }},
                 {new: true}, (err, doc) => {
                     if (err) {
                         console.log("Something wrong when updating data!");
@@ -254,8 +297,7 @@ router.post('/updateUserInfo/:userName', function(req, res) {
                     res.redirect("../user_page/" + userName);
             });
         }
-    });
-    
+    }); 
 });
 
 /* ------------------------------------------- POST to Add User Service ------------------------------*/
@@ -277,9 +319,18 @@ router.post('/adduser', function(req, res) {
     var userExp = req.body.userExp;
     var phoneNum = req.body.phone1;
     var birthday = req.body.birthday;
+    var dateCreated = req.body.dateCreated;
     var soundcloudLink = req.body.soundcloudLink;
     var facebookLink = req.body.facebookLink;
     var instagramLink = req.body.instagramLink;
+    var youtubeLink = req.body.youtubeLink;
+    var otherLink = req.body.otherLink;
+
+    //current date object 
+    var now = new Date();
+    now.setHours(0,0,0,0);
+    dateCreated = now;
+    console.log("... date created: "+ dateCreated);
 
     //if Name is already in database, error
     Ucollection.find({userName: {$eq:userName}}, (err, docs) => { 
@@ -305,6 +356,9 @@ router.post('/adduser', function(req, res) {
                 "soundcloudLink" : soundcloudLink, 
                 "instagramLink" : instagramLink, 
                 "facebookLink" : facebookLink,
+                "youtubeLink" : youtubeLink, 
+                "otherLink" : otherLink,
+                "dateCreated" : dateCreated,
                 "userEvents": [],
             }, function (err, doc) {
                 if (err) {
@@ -349,11 +403,13 @@ router.post('/createEvent', function(req, res) {
         }
         else {
             console.log("... This name does not exist in the database");
-
             //add the event to creator's userEvents
             Ucollection.findOneAndUpdate({userName: {$eq:eventsCreator}}, {$push:{"userEvents":eventName}}, (err, docs) => {
                 if(err) {
                     console.log("... error adding eventName to array userEvents");
+                }
+                else {
+                    console.log("... event " + eventName + " added to " + eventsCreator + "\'s userEvents");
                 }
             });
 
@@ -378,7 +434,6 @@ router.post('/createEvent', function(req, res) {
             });
         }
     });
-    
 });
 
 /* ---------------------------------------------------  POST to update EVENT Service  -------------------------------*/
@@ -419,7 +474,7 @@ router.post('/updateEventInfo/:eventName', function(req, res) {
                     }
                     console.log("... redirecting to: ../event_page/" + eventName);
                     res.redirect("../event_page/" + eventName);
-                });
+            });
         }
     });
 });
@@ -490,6 +545,42 @@ router.post('/removeUsersFromEvent/:eventName', function(req, res) {
         });
     });
     res.redirect("../event_page/" + currevent);
+});
+
+/* ----------------------------------------- POST to removeEvents Service -------------------------------- */
+router.post('/removeEventsFromUser/:userName', function(req, res) {
+    let userName = req.params.userName;
+    console.log("\n====> remove Events");
+    console.log("... req.body: " + JSON.stringify(req.body));
+    var checkedEvents = JSON.stringify(req.body).split(",");
+    var eventsToDelete = [];
+    var ecollection = req.db.get('eventcollection');
+    var ucollection = req.db.get('usercollection');
+    
+    checkedEvents.forEach((ele)=> {
+        ele = ele.replace("{", "");
+        ele = ele.replace("}", "");
+        ele = ele.replace("\"", "");
+        var event = ele.split("|");
+        eventsToDelete.push(event[0]);
+    });
+    console.log("... eventsToDelete: " + eventsToDelete);
+    eventsToDelete.forEach((ele) => { 
+        console.log("... deleting event: " + ele);
+        ecollection.remove({eventName: {$eq:ele}}, (err, doc) => {
+            if (err) {
+                console.log("... Something wrong when removing event!");
+            }
+            else console.log("... event" + ele + " removed!");
+        });
+        ucollection.findOneAndUpdate({userName: {$eq:userName}}, {$pull: {"userEvents" : ele}}, (err, doc) => {
+            if (err) {
+                console.log("... Something wrong when removing event to users related events!");
+            }
+            else console.log("... event " + ele + " removed from user " + userName);
+        });
+    });
+    res.redirect("../user_page/" + userName);
 });
 
 // ==============================================      ROUTING ENDS        =====================================================

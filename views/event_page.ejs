@@ -28,11 +28,10 @@
             <a href="../home_page"> <button type="button" id="head1" class="bouncy button" onClick="" > Home Page </button></a>
             <p>Created by:<a href='../user_page/<%= eventsCreator %>'><%= eventsCreator %></a></p>
 		</div>	
-
 	</div> 
 	
 	
-    <div class="content">
+  <div class="content">
 	
 		<div class="leftSide">
 		
@@ -40,7 +39,7 @@
 				<p>Event Name: <%= eventName %></p>
 				<p>Date: <%= eventDate %></p>
 				<p>Time: <%= eventTime %></p>
-				<p>Location: <%= eventLocation %></p>
+				<p id="locationLink">Location: </p>
 				<p>Event Info: <%= eventDesc %></p> 
 				<button class="button" onclick="document.getElementById('editInfoModal').style.display='block'" style="bottom: 5px;">Edit info</button>
 				<!-- 				The Modal content for  NEW User		-->
@@ -49,68 +48,63 @@
 				class="close" title="Close Modal">&times;</span>
 				  <!-- Modal Content -->
 				  <form class="modal-content animate" action='/updateEventInfo/<%= eventName %>' method="post">
-					<div class="imgcontainer">
-					  <!-- <img src="img_avatar2.png" alt="Avatar" class="avatar"> -->
-					</div>
-					<div class="container">
-                        <label>Edit Event Name: <input type="text" required autofocus name="editEventName" value='<%= eventName %>'></label><br>
-                        <input type="hidden" required name="editEventsCreator" value='<%= eventsCreator %>'>
-                        <label>Edit Event Date: <input type="date" required name="editEventDate" id="editDate" value='<%= eventDate %>'>
-                        </label><br>
-                        <label>Edit Event Time: <input type="time" required name="editEventTime" id="editBday" value='<%= eventTime %>'>
-                            </label><br>
-                        <label>Edit Event Location: <input type="text" required name="editEventLocation" value='<%= eventLocation %>'></label><br>
-                        <label>Edit Event Description <textarea required rows='4' cols='25' name="editEventDesc"><%= eventDesc %></textarea></label><br>
-                        <br>
-						<a href="../event_page/<%= eventName %>"><button type="submit" class="button">Update Event</button></a>
-					    <button type="button" onclick="document.getElementById('editInfoModal').style.display='none'" class="cancelbtn button">Cancel</button>
-					</div>
+						<div class="imgcontainer">
+								<a href='../home_page'> <img src="/images/EG-logo100px.png" /> </a>
+						</div>
+						<div class="searchResults">
+								<label>Edit Event Name: <input type="text" required autofocus name="editEventName" value='<%= eventName %>'></label><br>
+								<input type="hidden" required name="editEventsCreator" value='<%= eventsCreator %>'>
+								<label>Edit Event Date: <input type="date" required name="editEventDate" id="editDate" value='<%= eventDate %>'>
+								</label><br>
+								<label>Edit Event Time: <input type="time" required name="editEventTime" id="editBday" value='<%= eventTime %>'>
+										</label><br>
+								<label>Edit Event Location: <input type="text" required name="editEventLocation" value='<%= eventLocation %>'></label><br>
+								<label>Edit Event Description <textarea required rows='4' cols='25' name="editEventDesc"><%= eventDesc %></textarea></label><br>
+								<br>
+								<a href="../event_page/<%= eventName %>"><button type="submit" class="button">Update Event</button></a>
+								<button type="button" onclick="document.getElementById('editInfoModal').style.display='none'" class="cancelbtn button">Cancel</button>
+						</div>
 				  </form>
 				</div>
 			</div>
-			
 		</div>
 		
 		<div class="centerContent">
 		<p>
 		
 		</p>
-		
 		</div>
 		
 		<div class = "rightSide">
-			
 			<div id='related' class="relatedUsersDiv">
 				
 				<div class="relatedTopLeft">
-                    <p> Users associated with <%= eventName %></p>
-                      
+						<p> Users associated with <%= eventName %></p>               
 				</div>
 				
 				<div class="relatedTopRight">
 					<button class="button" onclick="document.getElementById('addUserModal').style.display='block'" style="bottom: 5px;">Add a User</button>
 					<!-- 				The Modal content for  NEW User		-->
 					<div id="addUserModal" class="modal" >
-					  <span onclick="document.getElementById('addUserModal').style.display='none'" 
-					class="close" title="Close Modal">&times;</span>
+					  <span onclick="document.getElementById('addUserModal').style.display='none'" class="close" title="Close Modal">&times;</span>
 					  <!-- Modal Content -->
 					  <form class="modal-content animate" action="/addUsersToEvent/<%= eventName %>" method="post">
 						<div class="imgcontainer">
-						  <!-- <img src="img_avatar2.png" alt="Avatar" class="avatar"> -->
+								<a href='../home_page'> <img src="/images/EG-logo100px.png" /> </a>
 						</div>
 						<div class="container">
 							<!--<input type="search" results="5" name='searchBar' size="40px" placeholder="Search for a User to add.."> -->
 							
 							<div class="searchResults" id="eventsSearchResults">
 
-                            </div>
-                            <br><a href="../event_page/<%= eventName %>"><button type="submit" class="button" >Add Checked Users</button></a>
-                            <button type="button" onclick="document.getElementById('addUserModal').style.display='none'" class='cancelbtn button'>Cancel</button>
-                        </div>
+              </div>
+							<br><a href="../event_page/<%= eventName %>"><button type="submit" class="button" >Add Checked Users</button></a>
+							<button type="button" onclick="document.getElementById('addUserModal').style.display='none'" class='cancelbtn button'>Cancel</button>
+            </div>
 					  </form>
-                    </div>
+          </div>
                     
-                    <button class="button" onclick="document.getElementById('removeUserModal').style.display='block'" style="bottom: 5px;">Remove a User</button>
+          <button class="button" onclick="document.getElementById('removeUserModal').style.display='block'" style="bottom: 5px;">Remove a User</button>
 					<!-- 				The Modal content for  NEW User		-->
 					<div id="removeUserModal" class="modal" >
 					  <span onclick="document.getElementById('removeUserModal').style.display='none'" 
@@ -118,48 +112,22 @@
 					  <!-- Modal Content -->
 					  <form class="modal-content animate" action="/removeUsersFromEvent/<%= eventName %>" method="post">
 						<div class="imgcontainer">
-						  <!-- <img src="img_avatar2.png" alt="Avatar" class="avatar"> -->
+								<a href='../home_page'> <img src="/images/EG-logo100px.png" /> </a>
 						</div>
 						<div class="container">
                             <!--<input type="search" results="5" name='searchBar' size="40px" placeholder="Search for a User to add.."> -->
                             
 							
 							<div class="searchResults" id="relatedUsersRemove">
-                                <!-- this is the creator of the event, they cannot be added or deleted-->
-                                <div class="relatedUser">
-                                    <div class="userNameDiv">
-                                        <p class="">Creator of this event: <a href="../user_page/<%= eventsCreator %>"> <%= eventsCreator %></a></p>
-                                    </div>
-                                    <div class="userRatingDiv">
-                                        <div class="userRatingTitle">
-                                            <p> <%= eventsCreator %>'s Rating: </p>
-                                        </div>
-                                        <div class="userRatingStars"> 
-                                        </div>
-                                    </div>
-                                </div>  
-
-                            </div>
-                            <br><a href="../event_page/<%= eventName %>"><button type="submit" class="button" >Remove Checked Users</button></a>
-                            <button type="button" onclick="document.getElementById('removeUserModal').style.display='none'" class='cancelbtn button'>Cancel</button>
-
-                        </div>
+											<!-- this is the creator of the event, they cannot be added or deleted--> 
+									</div>
+									<br><a href="../event_page/<%= eventName %>"><button type="submit" class="button" >Remove Checked Users</button></a>
+									<button type="button" onclick="document.getElementById('removeUserModal').style.display='none'" class='cancelbtn button'>Cancel</button>
+							</div>
 					  </form>
 					</div>
 				</div>				
 				<!-- this is the creator of the event, they cannot be added or deleted-->
-                    <div class="relatedUser">
-                        <div class="userNameDiv">
-                            <p class="">Event creator: <a href="../user_page/<%= eventsCreator %>"> <%= eventsCreator %></a></p>
-                        </div>
-                        <div class="userRatingDiv">
-                            <div class="userRatingTitle">
-                                <p> <%= eventsCreator %>'s Rating: </p>
-                            </div>
-                            <div class="userRatingStars"> 
-                            </div>
-                        </div>
-                    </div>
 			</div>
 		
 		</div>
@@ -173,7 +141,8 @@
     <script>
          fillEventsUsers('<%= relatedUsers %>', '<%= eventsCreator %>');
          fillAllUsers('<%= allUsers %>', '<%= eventsCreator %>', '<%= relatedUsers %>');
-         relatedUsersToRemove('<%= relatedUsers %>', '<%= eventsCreator %>');
+				 relatedUsersToRemove('<%= relatedUsers %>', '<%= eventsCreator %>');
+				 fillEventLocation('<%= eventLocation %>');
     </script>
 </body>
 </html>

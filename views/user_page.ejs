@@ -13,10 +13,10 @@
 
 </head>
 
-<body>
+<body>	 
 	<script src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'> </script>
-    <script src="/javascripts/global.js" > </script>
-    <script src="/javascripts/users.js" > </script>
+  <script src="/javascripts/global.js" > </script>
+  <script src="/javascripts/users.js" > </script>
   
 	<div class="header"> 
 		<div class = "EGlogo">
@@ -24,42 +24,61 @@
 		</div>
 
 		<div class="headCenter">
-			<h1 class="titleText"> <%= userName %> </h1>
+			<h1 class="titleText"> <%= userName %> , <%=vendorType %></h1>
 		</div>
 	
 		<div class = "nav">
 			<a href="../home_page"> <button type="button" id= "" class="bouncy button" onClick="" > Home Page </button></a>
-			<button class=" bouncy button" style="animation-delay:0.21s"onclick="document.getElementById('newEventModal').style.display='block'">Click here to create a new event</button>
-            
+			<button class=" bouncy button" style="animation-delay:0.07s"onclick="document.getElementById('newEventModal').style.display='block'">Create a new event</button>
+			<button class=" bouncy button" style="animation-delay:0.14s"onclick="document.getElementById('removeEventModal').style.display='block'">Remove an event</button> 
+			
             <!-- 				The Modal content for NEW event				-->
 			<div id="newEventModal" class="modal" >
 			  <span onclick="document.getElementById('newEventModal').style.display='none'" 
-			class="close" title="Close Modal">&times;</span>
-			<!-- Modal Content -->
-			  <form class="modal-content animate" action="/createEvent" method ="post">
-				<div class="imgcontainer">
-				  <!-- <img src="img_avatar2.png" alt="Avatar" class="avatar"> -->
-				</div>
+				class="close" title="Close Modal">&times;</span>
+				<!-- Modal Content -->
+					<form class="modal-content animate" action="/createEvent" method ="post">
+					<div class="imgcontainer">
+							<a href='../home_page'> <img src="/images/EG-logo100px.png" /> </a>
+					</div>
 
-				<div class="container">
-						<input type="hidden" name="eventsCreator" value='<%= userName %>'>
-						<label>Event Name: <input type="text" required autofocus name="eventName" placeholder="Event name..."></label><br>
-						<label>Event Date: <input type="date" required name="eventDate" placeholder="Event Date..."></label><br>
-						<label>Event Time: <input type="time" required name="eventTime" placeholder="Event Time..."></label><br>
-						<label>Event Location: <input type="text" required name="eventLocation" placeholder="Event Location... "></label><br>
-						<label>Event Description: <textarea required rows='4' cols='25' name="eventDesc" placeholder='short description of the event...'></textarea></label><br>
-						<br>
-				</div>
-
-				<div class="container" style="background-color:#f1f1f1">
+					<div class="searchResults">
+							<input type="hidden" name="eventsCreator" value='<%= userName %>'>
+							<label>Event Name: <input type="text" required autofocus name="eventName" placeholder="Event name..."></label><br>
+							<label>Event Date: <input type="date" required name="eventDate" placeholder="Event Date..."></label><br>
+							<label>Event Time: <input type="time" required name="eventTime" placeholder="Event Time..."></label><br>
+							<label>Event Location: <input type="text" required name="eventLocation" placeholder="Event Location... "></label><br>
+							<label>Event Description: <textarea required rows='4' cols='25' name="eventDesc" placeholder='short description of the event...'></textarea></label><br>
+							<br>
+					</div>
 					<br>
 					<a href="../event_page/"><button type="submit" class="button">Create Event</button></a>
 					<button type="button" onclick="document.getElementById('newEventModal').style.display='none'" class="cancelbtn button">Cancel</button>
-				</div>
-			  </form>
+					</form>
 			</div>
+
+			<!-- 				The Modal content for  remove event		-->
+			<div id="removeEventModal" class="modal" >
+					<span onclick="document.getElementById('removeEventModal').style.display='none'" 
+				class="close" title="Close Modal">&times;</span>
+					<!-- Modal Content -->
+					<form class="modal-content animate" action="/removeEventsFromUser/<%= userName %>" method="post">
+					<div class="imgcontainer">
+							<a href='../home_page'> <img src="/images/EG-logo100px.png" /> </a>
+					</div>
+					<div class="infocontainer">
+						<div class="searchResults" id="ownedEvents">
+								<p> You own these events, check a box and click the remove button to delete checked events</p>
+
+						</div>
+						<br><a href="../user_page/<%= userName %>"><button type="submit" class="button" >Remove Checked Events</button></a>
+						<button type="button" onclick="document.getElementById('removeEventModal').style.display='none'" class='cancelbtn button'>Cancel</button>
+
+						</div>
+					</form>
+				</div>
 		</div>
-		</div>	
+		</div>
 	</div> 
 	
 	
@@ -84,11 +103,9 @@
 		-->
 		  
 		  <div class="userInfoDiv" >
-			<div class="socialMedias">
-			<p class="socialText"> Check me out on Social Media! </p>
-				<a href='<%= soundcloudLink %>' target="_blank"> <img src="/images/soundcloudIcon50px.png" /> </a>
-				<a href='<%= facebookLink %>' target="_blank"> <img src="/images/facebookIcon50px.png" /> </a>
-				<a href='<%= instagramLink %>' target="_blank"> <img src="/images/instagramIcon50px.png" /> </a>
+			<div id="socialMedias">
+				
+					
 			</div>
 			
 			<div class="userContactInfo">
@@ -98,8 +115,8 @@
 			
 			<div class="userInfo">
 				<p>Name:  <%= firstName + " " + middleName + " " + lastName %></p>
-				<p>Age: </p>
-				<p>Years of experience: </p>
+				<p id="userAgeFill">Age: </p>
+				<p id="userDateFill">Event Genius member since: </p>
 				<p>Bio: <%= userBio %></p>
 				<button class="button" onclick="document.getElementById('editInfoModal').style.display='block'" style="bottom: 5px;">Edit info</button>
 				<!-- 				The Modal content for  NEW Vendor		-->
@@ -109,46 +126,44 @@
 				  <!-- Modal Content -->
 				  <form class="modal-content animate" action='/updateUserInfo/<%= userName %>' method="post">
 					<div class="imgcontainer">
-					  <!-- <img src="img_avatar2.png" alt="Avatar" class="avatar"> -->
+							<a href='../home_page'> <img src="/images/EG-logo100px.png" /> </a>
 					</div>
-					<div class="container">
-                        <label>Edit User Name: <input type="text"  autofocus name="editUserName" value='<%= userName %>'></label><br>
-					    <label>Edit First Name: <input type="text" name="editFirstName" value='<%= firstName %>'></label><br>
+					<div class="searchResults">
+            <label>Edit User Name: <input type="text"  autofocus name="editUserName" value='<%= userName %>'></label><br>
+					  <label>Edit First Name: <input type="text" name="editFirstName" value='<%= firstName %>'></label><br>
 						<label>Edit Middle Name: <input type="text" name="editMiddleName" value='<%= middleName %>'></label><br>
 						<label>Edit Last Name: <input type="text"  name="editLastName" value='<%= lastName %>'></label><br>
 						<label>Edit Email: <input type="email"  name="editEmail" value='<%= userEmail %>'></label><br>
-                        <label>Edit Phone Number: <input type="tel"  name="editPhone1" value='<%= phoneNum %>'></label><br>
-                        <!--<label>Edit Bio: <input type="textBox" name="editUserBio" maxlength="50" value='<%= userBio %>'></label><br>-->
-                        <label>Edit Bio: <textarea required rows='4' cols='25' name="editUserBio"><%= userBio %></textarea></label><br>
-                        <!--<label>Enter event: <input type="text" name="editUserEvents"></label><br> -->
-                        <!----
-						<label>Edit Birthday: <input type="date"  name="editBirthday" placeholder="Birthday..."></label><br>
-						<label>Edit how long have you been in the business?: <input type="number" name="editUserExp" placeholder="Number of years..."></label><br>
-						<label>Edit Bio: <input type="textBox" name="editUserBio" maxlength="50" placeholder="Tell clients about yourself!"></label><br>
-						<label>Edit Vendor Type:  <select name="VendorType"></label>
+						<label>Edit Phone Number: <input type="tel"  name="editPhone1" value='<%= phoneNum %>'></label><br>
+						<label>Edit your Bio: <textarea rows='4' cols ='50' name="editUserBio"><%= userBio %></textarea></label><br>
+						<label>Edit Birthday: <input type="date"  name="editBirthday" value='<%= birthday %>'></label><br>
+						<label>Edit Vendor Type:  <select name="vendorType"></label>
 							<optgroup label="Choose a type">
 								<option value="DJ">DJ</option>
+								<option value="Caterer">Caterer</option>
+								<option value="Photographer">Photographer</option>
+								<option value="Videographer">Videographer</option>
+								<option value="Event Planner">Event Planner</option>
+								<option value="Wedding Planner">Wedding Planner</option>
+								<option value="Musician">Musician</option>
+								<option value="Venue">Venue</option>
+								<option value="Client">Client</option>
 							</optgroup>
-                        </select>
-                        -->
+						</select>
+						
 						<br>
-						<p> Enter any Social Media Links Below: </p>
-						<label>Soundcloud: <input type="url" name="editSoundcloudLink" size="35" value='<%= soundcloudLink %>'></label><br>
-						<label>Facebook: <input type="url" name="editFacebookLink" size="35" value='<%= facebookLink %>'></label><br>
-						<label>Instagram: <input type="url" name="editInstagramLink"  size="35"value='<%= instagramLink %>'></label><br>
+						<div id="editLinks">
+							<p> Enter any Social Media Links Below: </p>
+							
+						</div>
 					</div>
-					<div class="container" style="background-color:#f1f1f1">
 						<br>
 						<a href="../user_page/<%= userName %>"><button type="submit" class="button" >Update User</button></a>
 					  <button type="button" onclick="document.getElementById('editInfoModal').style.display='none'" class="cancelbtn button">Cancel</button>
-					</div>
 				  </form>
 				</div>
 			</div>
-			
-			
 		  </div>
-			
 		</div>
 		
 		<div class="centerContent">
@@ -159,7 +174,7 @@
 		
 		<div class="rightSide">
 			<div class="pastEventsDiv" id="passedEventsFillDiv">
-				<p> Past Events</p>			
+				<p>Past Events</p>			
 			</div>
 		</div>
 
@@ -171,8 +186,12 @@
     </div>
     
     <script>
-       printUserEvents('<%= userEvents%>');
+			 printUserEvents('<%= userEvents %>');
+			 printEventsToRemove('<%= userEvents %>',' <%= userName %>')
+			 printLinks('<%= facebookLink %>',' <%= soundcloudLink %>','<%= instagramLink %>',' <%= youtubeLink %>','<%= otherLink %>')
+			 printAges('<%= birthday %>', '<%= dateCreated %>')
     </script>
-  
+  </div>
+</div>
 </body>
 </html>

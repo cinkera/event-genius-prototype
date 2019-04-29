@@ -37,10 +37,10 @@
 			  <!-- Modal Content -->
 			  <form class="modal-content animate" action="/adduser" method="post">
 				<div class="imgcontainer">
-				  <!-- <img src="img_avatar2.png" alt="Avatar" class="avatar"> -->
+						<a href='../home_page'> <img src="/images/EG-logo100px.png" /> </a>
 				</div>
 
-				<div class="container">
+				<div class="searchResults">
           <label>User Name: <input type="text" required autofocus name="userName" placeholder="User name..."></label><br>
           <label>First Name: <input type="text" required name="firstName" placeholder="First name..."></label><br>
 					<label>Middle Name: <input type="text" name="middleName" placeholder="Middle name..."></label><br>
@@ -48,11 +48,20 @@
 					<label>Email: <input type="email" required name="email" placeholder="Preferred email..."></label><br>
 					<label>Phone Number: <input type="tel" required name="phone1" placeholder="Preferred phone #..."></label><br>
 					<label>Birthday: <input type="date" required name="birthday" placeholder="Birthday..."></label><br>
-					<label>How long have you been in the business?: <input type="number" name="userExp" placeholder="Number of years..."></label><br>
+					<label>Tell clients about yourself!...<textarea rows='4' cols ='50' name="userBio"></textarea></label>
+					<input type="date" hidden name="dateCreated"><br>
 					
 					<label>User Type:  <select name="UserType"></label>		
 						<optgroup label="Choose a type">
-							<option value="DJ">DJ</option>
+								<option value="DJ">DJ</option>
+								<option value="Caterer">Caterer</option>
+								<option value="Photographer">Photographer</option>
+								<option value="Videographer">Videographer</option>
+								<option value="Event Planner">Event Planner</option>
+								<option value="Wedding Planner">Wedding Planner</option>
+								<option value="Musician">Musician</option>
+								<option value="Venue">Venue</option>
+								<option value="Client">Client</option>
 						</optgroup>
 					</select>
 					<br>
@@ -60,15 +69,13 @@
 					<label>Soundcloud: <input type="url" name="soundcloudLink" placeholder="Enter Link here (optional)"></label><br>
 					<label>Facebook: <input type="url" name="facebookLink" placeholder="Enter Link here (optional)"></label><br>
 					<label>Instagram: <input type="url" name="instagramLink" placeholder="Enter Link here (optional)"></label><br>
-					
+					<label>youtube: <input type="url" name="youtubeLink" placeholder="Enter Link here (optional)"></label><br>
+					<label>Other: <input type="url" name="otherLink" placeholder="Enter Link here (optional)"></label><br>
 				</div>
 
-				<div class="container" style="background-color:#f1f1f1">
 					<br>
 					<a href="user_page"><button type="submit" class="button" >Login</button></a>
 				  <button type="button" onclick="document.getElementById('newUserModal').style.display='none'" class="cancelbtn button">Cancel</button>
-				  <span class="psw">Forgot <a href="#">password?</a></span>
-				</div>
 			  </form>
 			</div>
 						
@@ -79,10 +86,10 @@
 			  <!-- Modal Content -->
 			  <form class="modal-content animate" action="">
 				<div class="imgcontainer">
-				  <!-- <img src="img_avatar2.png" alt="Avatar" class="avatar"> -->
+						<a href='../home_page'> <img src="/images/EG-logo100px.png" /> </a>
 				</div>
 
-				<div class="container">
+				<div class="searchResults">
 				  <label for="uname"><b>Username</b></label>
 				  <input type="text" placeholder="Enter Username" name="uname" required>
 				  <br>
@@ -94,15 +101,11 @@
 				  
 				</div>
 
-				<div class="container" style="background-color:#f1f1f1">
 				<a href="client_page"><button type="submit" class="button" >Login</button></a>
-				  <label>
+				<button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn button">Cancel</button>
+				<label>
 					<input type="checkbox" checked="checked" name="remember"> Remember me
-				  </label>
-					<br>
-				  <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn button">Cancel</button>
-				  <span class="psw">Forgot <a href="#">password?</a></span>
-				</div>
+				</label>
 			  </form>
 			</div>
 		</div>	
